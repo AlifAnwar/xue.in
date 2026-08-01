@@ -6,7 +6,11 @@ export interface VocabItem {
   indonesian: string
 }
 
-export type TrainingMode = "hanzi-to-id" | "id-to-hanzi"
+export type MultipleChoiceMode = "hanzi-to-id" | "id-to-hanzi"
+
+export type WriteItOutMode = "hanzi-to-pinyin" | "pinyin-to-hanzi"
+
+export type TrainingMode = MultipleChoiceMode | WriteItOutMode
 
 export interface QuizQuestion {
   item: VocabItem

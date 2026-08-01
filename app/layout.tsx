@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Noto_Sans } from "next/font/google";
+import { Poppins } from "next/font/google";
+import { Footer } from "@/components/footer/Footer";
 import "./globals.css";
 
-const notoSans = Noto_Sans({
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-noto-sans",
+  variable: "--font-poppins",
   weight: ["400", "500", "600", "700"],
 });
 
@@ -21,9 +22,12 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${notoSans.variable} h-full antialiased`}
+      className={`${poppins.variable} h-full antialiased`}
     >
-      <body className={`${notoSans.className} min-h-full flex flex-col bg-zinc-50 text-zinc-900`}>{children}</body>
+      <body className={`${poppins.className} min-h-full flex flex-col bg-zinc-50 text-zinc-900`}>
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
