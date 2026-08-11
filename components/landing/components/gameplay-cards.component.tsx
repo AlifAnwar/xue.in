@@ -10,6 +10,16 @@ import { ArrowUpRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { gameplayCards } from "@/components/landing/data/gameplay-challenges";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 const cardsContainerVariants: Variants = {
@@ -38,6 +48,12 @@ const cardVariants: Variants = {
   },
 };
 
+const comingSoonChallengeSlugs = new Set([
+  "connect-the-dots",
+  "pick-your-answer",
+  "beat-the-clock",
+]);
+
 interface GameplayCardsProps {
   animate?: "hidden" | "visible";
   variant?: "grid" | "compact" | "training";
@@ -52,6 +68,7 @@ export function GameplayCards({
   const shouldReduceMotion = useReducedMotion();
   const [transitionTarget, setTransitionTarget] = useState<string | null>(null);
   const [wipeSize, setWipeSize] = useState({ width: 1200, height: 800 });
+  const [comingSoonTitle, setComingSoonTitle] = useState<string | null>(null);
 
   const handleChallengeClick = (
     event: MouseEvent<HTMLAnchorElement>,
@@ -103,55 +120,110 @@ export function GameplayCards({
         >
           {gameplayCards.map((card) => {
             const href = `/training/${card.slug}`;
-
-            return (
-              <motion.div key={card.slug} variants={cardVariants}>
-                <Link
-                  href={href}
-                  onClick={(event) => handleChallengeClick(event, href)}
-                  aria-disabled={transitionTarget !== null}
-                  className={cn(
-                    "group relative flex min-h-[250px] h-full flex-col rounded-lg border border-zinc-200 bg-white p-6 text-left shadow-[0_16px_45px_rgba(15,23,42,0.06)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_22px_55px_rgba(15,23,42,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 sm:p-7",
-                    transitionTarget && "pointer-events-none",
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div
-                      className={cn(
-                        "flex size-[60px] items-center justify-center rounded-md",
-                        card.iconBackground,
-                      )}
-                    >
-                      <Image
-                        src={card.icon}
-                        alt=""
-                        aria-hidden="true"
-                        className="size-8"
-                      />
-                    </div>
-                    <ArrowUpRight
+            const isComingSoon = comingSoonChallengeSlugs.has(card.slug);
+            const cardClassName = cn(
+              "group relative flex min-h-[250px] h-full w-full flex-col rounded-lg border border-zinc-200 bg-white p-6 text-left shadow-[0_16px_45px_rgba(15,23,42,0.06)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_22px_55px_rgba(15,23,42,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-4 sm:p-7",
+              isComingSoon && "cursor-not-allowed",
+              transitionTarget && "pointer-events-none",
+            );
+            const cardContent = (
+              <>
+                <div className="flex items-start justify-between gap-4">
+                  <div
+                    className={cn(
+                      "flex size-[60px] items-center justify-center rounded-md",
+                      card.iconBackground,
+                    )}
+                  >
+                    <Image
+                      src={card.icon}
+                      alt=""
                       aria-hidden="true"
-                      className="size-5 text-zinc-400 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-zinc-900"
+                      className="size-8"
                     />
                   </div>
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    className={cn(
+                      "size-5 text-zinc-400 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-zinc-900",
+                      isComingSoon &&
+                        "group-hover:translate-x-0 group-hover:translate-y-0",
+                    )}
+                  />
+                </div>
 
+                <div className="mt-7 flex flex-wrap items-center gap-3">
                   <h2
                     className={cn(
-                      "mt-7 text-2xl font-semibold leading-tight tracking-normal",
+                      "text-2xl font-semibold leading-tight tracking-normal",
                       card.titleColor,
                     )}
                   >
                     {card.title}
                   </h2>
-                  <div className={cn("mt-5 border-t", card.dividerColor)} />
-                  <p className="mt-4 text-base leading-relaxed text-zinc-700">
-                    {card.description}
-                  </p>
-                </Link>
+                  {isComingSoon ? (
+                    <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-normal text-zinc-500">
+                      Coming soon
+                    </span>
+                  ) : null}
+                </div>
+                <div className={cn("mt-5 border-t", card.dividerColor)} />
+                <p className="mt-4 text-base leading-relaxed text-zinc-700">
+                  {card.description}
+                </p>
+              </>
+            );
+
+            return (
+              <motion.div key={card.slug} variants={cardVariants}>
+                {isComingSoon ? (
+                  <button
+                    type="button"
+                    aria-disabled="true"
+                    onClick={() => setComingSoonTitle(card.title)}
+                    className={cardClassName}
+                  >
+                    {cardContent}
+                  </button>
+                ) : (
+                  <Link
+                    href={href}
+                    onClick={(event) => handleChallengeClick(event, href)}
+                    aria-disabled={transitionTarget !== null}
+                    className={cardClassName}
+                  >
+                    {cardContent}
+                  </Link>
+                )}
               </motion.div>
             );
           })}
         </motion.div>
+
+        <Dialog
+          open={comingSoonTitle !== null}
+          onOpenChange={(open) => {
+            if (!open) {
+              setComingSoonTitle(null);
+            }
+          }}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Coming soon</DialogTitle>
+              <DialogDescription>
+                {comingSoonTitle
+                  ? `${comingSoonTitle} belum tersedia. Coba Write it out dulu ya.`
+                  : "Challenge ini belum tersedia."}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button">OK</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {transitionTarget ? (
           <motion.svg
