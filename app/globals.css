@@ -128,3 +128,108 @@
     @apply font-sans;
   }
 }
+
+@keyframes connect-match-correct {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  28% {
+    transform: translateX(-4px) scale(1.04);
+  }
+  54% {
+    transform: translateX(4px) scale(0.98);
+  }
+  76% {
+    transform: translateX(-2px) scale(1.02);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes connect-match-wrong {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  20% {
+    transform: translateX(-7px) scale(1.02);
+  }
+  40% {
+    transform: translateX(7px) scale(0.99);
+  }
+  60% {
+    transform: translateX(-5px) scale(1.01);
+  }
+  80% {
+    transform: translateX(3px) scale(0.995);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes connect-result-pill {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes connect-result-segment {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+    transform-origin: 120px 120px;
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.05);
+    transform-origin: 120px 120px;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: 120px 120px;
+  }
+}
+
+@keyframes connect-result-score {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  68% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes connect-result-legend {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes connect-result-card {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

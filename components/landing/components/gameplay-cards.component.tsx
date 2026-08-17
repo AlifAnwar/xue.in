@@ -49,7 +49,6 @@ const cardVariants: Variants = {
 };
 
 const comingSoonChallengeSlugs = new Set([
-  "connect-the-dots",
   "pick-your-answer",
   "beat-the-clock",
 ]);

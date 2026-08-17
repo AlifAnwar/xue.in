@@ -3,6 +3,7 @@ import { buildQuestions } from "@/lib/quiz";
 import { QuizConfig, TrainingMode } from "@/types/vocabulary";
 import QuizClient from "@/components/quiz/QuizClient";
 import WriteItOutQuizClient from "@/components/quiz/WriteItOutQuizClient";
+import ConnectTheDotsQuizClient from "@/components/quiz/ConnectTheDotsQuizClient";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,13 @@ export default async function QuizPage({
     (mode === "hanzi-to-pinyin" || mode === "pinyin-to-hanzi")
   ) {
     return <WriteItOutQuizClient key={t} initialQuestions={questions} mode={mode} />;
+  }
+
+  if (
+    challenge === "connect-the-dots" &&
+    (mode === "hanzi-to-pinyin" || mode === "hanzi-to-id")
+  ) {
+    return <ConnectTheDotsQuizClient key={t} initialQuestions={questions} mode={mode} />;
   }
 
   return <QuizClient key={t} initialQuestions={questions} mode={mode} />;

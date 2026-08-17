@@ -16,8 +16,9 @@ interface ChallengeSetupProps {
 export function ChallengeSetup({ challenge }: ChallengeSetupProps) {
   const router = useRouter();
   const isWriteItOut = challenge.slug === "write-it-out";
+  const isConnectTheDots = challenge.slug === "connect-the-dots";
   const [mode, setMode] = useState<TrainingMode>(
-    isWriteItOut ? "hanzi-to-pinyin" : "hanzi-to-id",
+    isWriteItOut ? "hanzi-to-pinyin" : isConnectTheDots ? "hanzi-to-pinyin" : "hanzi-to-id",
   );
   const [totalQuestions, setTotalQuestions] = useState(10);
 
@@ -87,6 +88,42 @@ export function ChallengeSetup({ challenge }: ChallengeSetupProps) {
                     <span className="block font-semibold text-zinc-900">Hanzi mode</span>
                     <span className="mt-2 block text-xs leading-relaxed text-zinc-500">
                       See Pinyin and type the Traditional Hanzi yourself.
+                    </span>
+                  </button>
+                </>
+              ) : isConnectTheDots ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setMode("hanzi-to-pinyin")}
+                    aria-pressed={mode === "hanzi-to-pinyin"}
+                    className={`rounded-lg border p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${
+                      mode === "hanzi-to-pinyin"
+                        ? "border-zinc-900 bg-zinc-50 ring-1 ring-zinc-900"
+                        : "border-zinc-200 bg-white hover:border-zinc-400"
+                    }`}
+                  >
+                    <Languages className="mb-4 size-5 text-[#0095E7]" aria-hidden="true" />
+                    <span className="block font-semibold text-zinc-900">Hanzi to Pinyin</span>
+                    <span className="mt-2 block text-xs leading-relaxed text-zinc-500">
+                      Match Hanzi characters with their Pinyin.
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setMode("hanzi-to-id")}
+                    aria-pressed={mode === "hanzi-to-id"}
+                    className={`rounded-lg border p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 ${
+                      mode === "hanzi-to-id"
+                        ? "border-zinc-900 bg-zinc-50 ring-1 ring-zinc-900"
+                        : "border-zinc-200 bg-white hover:border-zinc-400"
+                    }`}
+                  >
+                    <Keyboard className="mb-4 size-5 text-[#0095E7]" aria-hidden="true" />
+                    <span className="block font-semibold text-zinc-900">Hanzi to Indonesian</span>
+                    <span className="mt-2 block text-xs leading-relaxed text-zinc-500">
+                      Match Hanzi characters with their meanings.
                     </span>
                   </button>
                 </>
